@@ -2,19 +2,14 @@ navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia 
 window.URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
 window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.msAudioContext;
 
-var width = 1023;
-var height = 1023;
-
-var debug_width = 1023;
-var debug_height = 256;
 
 var SOUND_LEVEL_DEV = 10;
 var FFT_SIZE = 512;
-var span = width/FFT_SIZE;
 var DEBUG = false;
 
 
 function initialize() {
+  var centerElement = document.getElementById("center");
   var audioElement = document.getElementById("audio");
   var frequencyElement = document.getElementById("frequency");
   var timeDomainElement = document.getElementById("timedomain");
@@ -24,6 +19,14 @@ function initialize() {
   var viewContext = viewElement.getContext("2d");
   var frequencyData;
   var timeDomainData;
+
+
+  var width = centerElement.clientWidth;
+  var height = centerElement.clientHeight;
+
+  var debug_width = width;
+  var debug_height = 256;
+  var span = width/FFT_SIZE;
 
   var max_visuals = 10;
   var numflg = new Array( max_visuals );
@@ -111,7 +114,6 @@ function initialize() {
     return angle * (Math.PI/180);
   }
 
-
   DefaultWave = {
     run:function(){
       console.log();
@@ -130,15 +132,12 @@ function initialize() {
     },
     down_key:function(){
     },right_key:function(){
-
     },left_key:function(){
-
     }
-
   }
+
   RectWave = {
     run:function(){
-      console.log();
       //		viewcontext.beginpath();
       //		viewContext.moveTo(0, (1 - (timeDomainData[0] / 255)) * height);
       viewContext.strokeStyle = "rgba(250, 230, 225,0.5)";
@@ -150,6 +149,7 @@ function initialize() {
       for (var i = 1, l = 10; i < l; i++) {
         for (var j = 10, l2 = 20; j < l2; j++) {
           var min_size = height/9;
+          var min_size_x = width/9
           var max_size = 25000;
           var default_pos_x = 0;
           var default_pos_y = -height;
@@ -158,11 +158,10 @@ function initialize() {
           var time_x = (0.5 - ((timeDomainData[j*20] / 255))) * (max_size);
           viewContext.lineWidth = 5*(1 - (timeDomainData[i*20] / 255));
 
-          viewContext.rect(default_pos_x + (min_size*i) - ((min_size+time_x)/2),
+          viewContext.rect(default_pos_x + (min_size_x*i) - ((min_size+time_x)/2),
             default_pos_y + (min_size*j) - ((min_size+time_y)/2),
             time_y, time_x);
           viewContext.lineWidth =1;
-
         }
       }
       //viewContext.fill();
@@ -177,11 +176,8 @@ function initialize() {
     },
     down_key:function(){
     },right_key:function(){
-
     },left_key:function(){
-
     }
-
   }
   NewVisual = {
     run:function(){
@@ -224,11 +220,8 @@ function initialize() {
     },
     down_key:function(){
     },right_key:function(){
-
     },left_key:function(){
-
     }
-
   }
 
   CircleWave = {
@@ -358,6 +351,7 @@ function initialize() {
       eightkey = 56,
       ninekey = 57,
       zerokey = 48;
+      f_key = 70;
     if(key_code == onekey){
       console.log("pressed 1");
     }else if(key_code == twokey){
@@ -385,19 +379,19 @@ function initialize() {
     }else if(key_code == onekey){
       numflg[1] = !numflg[1];
 
-    }	
+    }
     else if(key_code == twokey){
       numflg[2] = !numflg[2];
 
-    }	
+    }
     else if(key_code == threekey){
       numflg[3] = !numflg[3];
 
-    }	
+    }
     else if(key_code == fourkey){
       numflg[4] = !numflg[4];
 
-    }	
+    }
     else if(key_code == fivekey){
       numflg[5] = !numflg[5];
 
@@ -405,19 +399,21 @@ function initialize() {
     else if(key_code == sixkey){
       numflg[6] = !numflg[6];
 
-    }	
+    }
     else if(key_code == sevenkey){
       numflg[7] = !numflg[7];
 
-    }	
+    }
     else if(key_code == eightkey){
       numflg[8] = !numflg[8];
 
-    }	
+    }
     else if(key_code == ninekey){
       numflg[9] = !numflg[9];
 
-    }	
+    }else if(key_code == f_key) {
+      document.getElementById('center').requestFullscreen()
+    }
 
   }
   document.addEventListener("keydown" , KeyDownFunc);
